@@ -3,34 +3,23 @@ const axios = require ('axios');
 
 
 function getReka() {
-return axios.get('https://gbika.org/renungan-harian/').then((response) => {
-    const $ = cheerio.load(response.data);
-    const dataReka = []; // create array for data
-    const urlElms = $('div.pexeto-recent-posts'); // elements we want to scrap
-    urlElms.each((i, element) => {
-        const reka = {
-            // find the data we want to scrap with spesific attribute
-            title: $(urlElms[i]).find('a').attr('data-hover'),
-            link: $(urlElms).find('a').attr('href'),
-            label: $(urlElms).find('span.rp-cat.a').text()
+    return axios.get('https://gbika.org/renungan-harian/').then((response) => {
+        const $ = cheerio.load(response.data);
+        const urlElms1 = $('div.section-boxed'); // elements we want to scrap
+        const $element = $(urlElms1);
+    
+        // const label = $element.find('span.rp-cat a').attr('href')
+        // const title = $element.find('div.rp-info a').attr('data-hover')
+        // const link = $element.find('div.rp-info a').attr('href')
+        const dataReka = {
+            title: $element.find('div.rp-info a').attr('data-hover'),
+            label: $element.find('span.rp-cat a').attr('href'),
+            link: $element.find('div.rp-info a').attr('href')
         }
-        console.log(reka)
-        return reka;
-        // console.log(dataReka.push(reka));
+        console.log(dataReka)
     })
 }
-)}
-console.log(getReka());
 
-//     for(let i = 0; i < urlElms.length; i++) {
-//         const urlSpan = $(urlElms[i]).find('a')[0]
-//         const link = $(urlElms).find('a').attr('href')
-
-//         if(urlSpan){
-//             const urlText = $(urlSpan).text()
-//             // const text = $(link).text()
-//             console.log(urlText)
-//             console.log(link)
-//         }
-//     }
-// })
+module.exports = {
+    getReka
+}
